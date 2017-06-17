@@ -19,10 +19,10 @@ namespace WakuTest.Sample
 		[UnityTest]
 		public IEnumerator ClickAButton_ChangeText()
 		{
-			yield return SetupEventSystem();
+			yield return SetupEventSystemAsync();
 			for (int i = 1; i < 10; ++i)
 			{
-				yield return Button("AButton").Click();
+				Button("AButton").Click();
 				Assert.AreEqual(Text("AText").text, i.ToString());
 			}
 		}
@@ -30,10 +30,10 @@ namespace WakuTest.Sample
 		[UnityTest]
 		public IEnumerator ClickBButton_NoChangeTexts()
 		{
-			yield return SetupEventSystem();
+			yield return SetupEventSystemAsync();
 			for (int i = 1; i < 10; ++i)
 			{
-				yield return Button("BButton").Click();
+				Button("BButton").Click();
 				Assert.AreEqual(Text("AText").text, "0");
 				Assert.AreEqual(Text("CText").text, "0");
 			}
@@ -42,21 +42,21 @@ namespace WakuTest.Sample
 		[UnityTest]
 		public IEnumerator OpenAndCloseWindow()
 		{
-			yield return SetupEventSystem();
-			yield return Button("OpenWindowButton").Click();
-			yield return Wait("CloseWindowButton");
-			yield return Button("CloseWindowButton").Click();
+			yield return SetupEventSystemAsync();
+			Button("OpenWindowButton").Click();
+			yield return WaitAsync("CloseWindowButton");
+			Button("CloseWindowButton").Click();
 		}
 
 		[UnityTest]
 		public IEnumerator MonkeyTest_RandomButton()
 		{
-			yield return SetupEventSystem();
+			yield return SetupEventSystemAsync();
 
 			Debug.Log("--- MonkeyTest ---");
 			for (int i = 0; i < 50; ++i)
 			{
-				yield return Wait(() => {
+				yield return WaitAsync(() => {
 					var button = GameObject.FindObjectsOfType<Button>().Where(x => x.IsClickable()).Where(x => x.name != "RaiseExceptionButton").RandomAtOrDefault();
 					if (button == null) return false;
 

@@ -32,7 +32,7 @@ namespace WakuTest
 			SceneManager.UnloadSceneAsync("Sample");
 		}
 
-		public static IEnumerator SetupEventSystem()
+		public static IEnumerator SetupEventSystemAsync()
 		{
 			yield return null;
 		}
@@ -51,7 +51,7 @@ namespace WakuTest
 			return component;
 		}
 
-		public IEnumerator Wait(Func<bool> action, float timeout = 1.0f)
+		public IEnumerator WaitAsync(Func<bool> action, float timeout = 1.0f)
 		{
 			var startTime = Time.time;
 			while (startTime + timeout > Time.time)
@@ -62,7 +62,7 @@ namespace WakuTest
 			Assert.Fail("Wait Timeout");
 		}
 
-		public IEnumerator Wait(string name, float timeout = 1.0f)
+		public IEnumerator WaitAsync(string name, float timeout = 1.0f)
 		{
 			var startTime = Time.time;
 			while (startTime + timeout > Time.time)
@@ -84,12 +84,11 @@ namespace WakuTest
 
 	public static class Extensions
 	{
-		public static IEnumerator Click(this Button self)
+		public static void Click(this Button self)
 		{
 			Assert.IsNotNull(self, "Button is null");
 			self.IsClickable(withAssert: true);
 			self.onClick.Invoke();
-			yield return null;
 		}
 
 		public static T RandomAt<T>(this IEnumerable<T> self)
