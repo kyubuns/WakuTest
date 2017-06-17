@@ -52,11 +52,11 @@ namespace WakuTest.Sample
 		public IEnumerator CannotClickBButton()
 		{
 			yield return null;
-            Button("ActiveCoverButton").Click();
+			yield return Button("ActiveCoverButton").Click();
 			yield return null;
 			for (int i = 1; i < 10; ++i)
 			{
-				Button("BButton").Click();
+				yield return Button("BButton").Click(); // raise error!
 			}
 		}
 		*/
