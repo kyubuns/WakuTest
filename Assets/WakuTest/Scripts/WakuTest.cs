@@ -117,7 +117,7 @@ namespace WakuTest
 			var results = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 
-			var raycastResult = (results[0].gameObject == button.gameObject);
+			var raycastResult = (results[0].gameObject.GetComponentInParent<Button>() == button);
 
 			if (withAssert)
 			{
