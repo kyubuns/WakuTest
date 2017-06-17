@@ -51,20 +51,15 @@ namespace WakuTest
 			return component;
 		}
 
-		public IEnumerator WaitForAppearClickableButton(float timeout = 1.0f)
+		public IEnumerator WaitFor(Func<bool> action, float timeout = 1.0f)
 		{
 			var startTime = Time.time;
 			while (startTime + timeout > Time.time)
 			{
-				if (GetAllClickableButton().Count() > 0) yield break;
+				if (action()) yield break;
 				yield return null;
 			}
-			Assert.Fail("WaitForAppearClickableButton Timeout");
-		}
-
-		public Button[] GetAllClickableButton()
-		{
-			return UnityEngine.GameObject.FindObjectsOfType<Button>().Where(x => Extensions.CanClick(x)).ToArray();
+			Assert.Fail("WaitFor Timeout");
 		}
 
 		public IEnumerator WaitForAppear(string name, float timeout = 1.0f)
@@ -79,7 +74,7 @@ namespace WakuTest
 			Assert.Fail("WaitForAppear GameObject({0}) Timeout", name);
 		}
 
-		public GameObject GameObject(string name)
+		private GameObject GameObject(string name)
 		{
 			var go = UnityEngine.GameObject.Find(name);
 			Assert.NotNull(go, string.Format("GameObject({0}) not found", name));
@@ -94,7 +89,7 @@ namespace WakuTest
 			Assert.IsNotNull(self, string.Format("Button is null"));
 			Assert.IsTrue(self.gameObject.activeInHierarchy, string.Format("Button({0}) is inactive", self.name));
 			Assert.IsTrue(self.interactable, string.Format("Button({0}) is not interactable", self.name));
-			CanClick(self, withAssert: true);
+			self.IsClickable(withAssert: true);
 			self.onClick.Invoke();
 			yield return null;
 		}
@@ -104,7 +99,7 @@ namespace WakuTest
 			return self.ElementAt(UnityEngine.Random.Range(0, self.Count()));
 		}
 
-		public static bool CanClick(Button button, bool withAssert = false)
+		public static bool IsClickable(this Button button, bool withAssert = false)
 		{
 			var canvas = button.GetComponentInParent<Canvas>();
 

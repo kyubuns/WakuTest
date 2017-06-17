@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -55,11 +56,14 @@ namespace WakuTest.Sample
 			Debug.Log("--- MonkeyTest ---");
 			for (int i = 0; i < 50; ++i)
 			{
-				yield return WaitForAppearClickableButton();
-				var buttons = GetAllClickableButton().Where(x => x.name != "RaiseExceptionButton");
-				var button = buttons.RandomAt();
-				Debug.Log("Click " + button.name);
-				yield return button.Click();
+				yield return WaitFor(() => {
+					var button = GameObject.FindObjectsOfType<Button>().Where(x => x.IsClickable()).Where(x => x.name != "RaiseExceptionButton").RandomAt();
+					if (button == null) return false;
+
+					Debug.Log(Time.time + " Click " + button.name);
+					button.Click();
+					return true;
+				});
 			}
 		}
 	}
