@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -38,27 +39,24 @@ namespace WakuTest.Sample
 		}
 
 		[UnityTest]
+		public IEnumerator OpenAndCloseWindow()
+		{
+			yield return SetupEventSystem();
+			yield return Button("OpenWindowButton").Click();
+			yield return Find("CloseWindowButton");
+			yield return Button("CloseWindowButton").Click();
+		}
+
+		[UnityTest]
 		public IEnumerator MonkeyTest_RandomButton()
 		{
 			yield return SetupEventSystem();
 			for (int i = 0; i < 50; ++i)
 			{
-				yield return RandomButton().Click();
+				var buttons = GetAllClickableButton().Where(x => x.name != "RaiseExceptionButton");
+				if (buttons.Count() > 0) yield return buttons.ElementAt(Random.Range(0, buttons.Count())).Click();
+				yield return null;
 			}
 		}
-
-		/*
-		[UnityTest]
-		public IEnumerator CannotClickBButton()
-		{
-			yield return null;
-			yield return Button("ActiveCoverButton").Click();
-			yield return null;
-			for (int i = 1; i < 10; ++i)
-			{
-				yield return Button("BButton").Click(); // raise error!
-			}
-		}
-		*/
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -50,10 +51,25 @@ namespace WakuTest
 			return component;
 		}
 
-		public Button RandomButton()
+		public Button[] GetAllClickableButton()
 		{
-			var buttons = UnityEngine.GameObject.FindObjectsOfType<Button>().Where(x => Extensions.CanClick(x)).ToArray();
-			return buttons[Random.Range(0, buttons.Count())];
+			return UnityEngine.GameObject.FindObjectsOfType<Button>().Where(x => Extensions.CanClick(x)).ToArray();
+		}
+
+		public IEnumerator Find(string name)
+		{
+			var startTime = Time.time;
+			while (true)
+			{
+				var go = UnityEngine.GameObject.Find(name);
+				if (go) yield break;
+				if (startTime + 1.0 < Time.time)
+				{
+					Assert.Fail("GameObject({0}) can not found", name);
+					yield break;
+				}
+				yield return null;
+			}
 		}
 
 		public GameObject GameObject(string name)
@@ -94,7 +110,7 @@ namespace WakuTest
 
 			if (withAssert && !result)
 			{
-				Assert.Fail(string.Format("Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name));
+				Assert.Fail("Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name);
 			}
 
 			return result;

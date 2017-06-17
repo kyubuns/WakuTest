@@ -7,14 +7,20 @@ namespace WakuTest.Sample
 	public class SetActiveButton : MonoBehaviour
 	{
 		public GameObject Target;
+		public float Delay;
 		public bool Active;
 
 		void Start()
 		{
 			GetComponent<Button>().onClick.AddListener(() =>
 			{
-				Target.SetActive(Active);
+				Invoke("OnClick", Delay);
 			});
+		}
+
+		public void OnClick()
+		{
+			Target.SetActive(Active);
 		}
 	}
 }
