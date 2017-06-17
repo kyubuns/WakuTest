@@ -51,11 +51,15 @@ namespace WakuTest.Sample
 		public IEnumerator MonkeyTest_RandomButton()
 		{
 			yield return SetupEventSystem();
+
+			Debug.Log("--- MonkeyTest ---");
 			for (int i = 0; i < 50; ++i)
 			{
 				yield return WaitForAppearClickableButton();
 				var buttons = GetAllClickableButton().Where(x => x.name != "RaiseExceptionButton");
-				yield return buttons.RandomAt().Click();
+				var button = buttons.RandomAt();
+				Debug.Log("Click " + button.name);
+				yield return button.Click();
 			}
 		}
 	}
