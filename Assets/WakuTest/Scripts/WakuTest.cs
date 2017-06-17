@@ -51,7 +51,7 @@ namespace WakuTest
 			return component;
 		}
 
-		public IEnumerator WaitFor(Func<bool> action, float timeout = 1.0f)
+		public IEnumerator Wait(Func<bool> action, float timeout = 1.0f)
 		{
 			var startTime = Time.time;
 			while (startTime + timeout > Time.time)
@@ -59,10 +59,10 @@ namespace WakuTest
 				if (action()) yield break;
 				yield return null;
 			}
-			Assert.Fail("WaitFor Timeout");
+			Assert.Fail("Wait Timeout");
 		}
 
-		public IEnumerator WaitForAppear(string name, float timeout = 1.0f)
+		public IEnumerator Wait(string name, float timeout = 1.0f)
 		{
 			var startTime = Time.time;
 			while (startTime + timeout > Time.time)
@@ -71,7 +71,7 @@ namespace WakuTest
 				if (go) yield break;
 				yield return null;
 			}
-			Assert.Fail("WaitForAppear GameObject({0}) Timeout", name);
+			Assert.Fail("Wait GameObject({0}) Timeout", name);
 		}
 
 		private GameObject GameObject(string name)

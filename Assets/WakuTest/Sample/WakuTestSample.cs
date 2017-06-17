@@ -44,7 +44,7 @@ namespace WakuTest.Sample
 		{
 			yield return SetupEventSystem();
 			yield return Button("OpenWindowButton").Click();
-			yield return WaitForAppear("CloseWindowButton");
+			yield return Wait("CloseWindowButton");
 			yield return Button("CloseWindowButton").Click();
 		}
 
@@ -56,7 +56,7 @@ namespace WakuTest.Sample
 			Debug.Log("--- MonkeyTest ---");
 			for (int i = 0; i < 50; ++i)
 			{
-				yield return WaitFor(() => {
+				yield return Wait(() => {
 					var button = GameObject.FindObjectsOfType<Button>().Where(x => x.IsClickable()).Where(x => x.name != "RaiseExceptionButton").RandomAtOrDefault();
 					if (button == null) return false;
 
