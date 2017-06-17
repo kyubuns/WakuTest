@@ -40,14 +40,14 @@ namespace WakuTest
 		public Button Button(string name)
 		{
 			var component = GameObject(name).GetComponentInParent<Button>();
-			Assert.NotNull(component, string.Format("GameObject({0}) is not Button", name));
+			Assert.NotNull(component, "GameObject({0}) is not Button", name);
 			return component;
 		}
 
 		public Text Text(string name)
 		{
 			var component = GameObject(name).GetComponentInParent<Text>();
-			Assert.NotNull(component, string.Format("GameObject({0}) is not Text", name));
+			Assert.NotNull(component, "GameObject({0}) is not Text", name);
 			return component;
 		}
 
@@ -77,7 +77,7 @@ namespace WakuTest
 		private GameObject GameObject(string name)
 		{
 			var go = UnityEngine.GameObject.Find(name);
-			Assert.NotNull(go, string.Format("GameObject({0}) not found", name));
+			Assert.NotNull(go, "GameObject({0}) not found", name);
 			return go;
 		}
 	}
@@ -86,9 +86,7 @@ namespace WakuTest
 	{
 		public static IEnumerator Click(this Button self)
 		{
-			Assert.IsNotNull(self, string.Format("Button is null"));
-			Assert.IsTrue(self.gameObject.activeInHierarchy, string.Format("Button({0}) is inactive", self.name));
-			Assert.IsTrue(self.interactable, string.Format("Button({0}) is not interactable", self.name));
+			Assert.IsNotNull(self, "Button is null");
 			self.IsClickable(withAssert: true);
 			self.onClick.Invoke();
 			yield return null;
@@ -119,14 +117,20 @@ namespace WakuTest
 			var results = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 
-			var result = (results[0].gameObject == button.gameObject);
+			var raycastResult = (results[0].gameObject == button.gameObject);
 
-			if (withAssert && !result)
+			if (withAssert)
 			{
-				Assert.Fail("Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name);
+				Assert.IsTrue(raycastResult, "Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name);
+				Assert.IsTrue(button.gameObject.activeInHierarchy, "Button({0}) is inactive", button.name);
+				Assert.IsTrue(button.interactable, "Button({0}) is not interactable", button.name);
 			}
 
-			return result;
+			if (!raycastResult) return false;
+			if (!button.gameObject.activeInHierarchy) return false;
+			if (!button.interactable) return false;
+
+			return true;
 		}
 	}
 }
