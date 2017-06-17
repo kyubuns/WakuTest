@@ -57,7 +57,7 @@ namespace WakuTest.Sample
 			for (int i = 0; i < 50; ++i)
 			{
 				yield return WaitFor(() => {
-					var button = GameObject.FindObjectsOfType<Button>().Where(x => x.IsClickable()).Where(x => x.name != "RaiseExceptionButton").RandomAt();
+					var button = GameObject.FindObjectsOfType<Button>().Where(x => x.IsClickable()).Where(x => x.name != "RaiseExceptionButton").RandomAtOrDefault();
 					if (button == null) return false;
 
 					Debug.Log(Time.time + " Click " + button.name);

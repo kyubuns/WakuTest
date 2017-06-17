@@ -99,6 +99,11 @@ namespace WakuTest
 			return self.ElementAt(UnityEngine.Random.Range(0, self.Count()));
 		}
 
+		public static T RandomAtOrDefault<T>(this IEnumerable<T> self)
+		{
+			return self.Count() == 0 ? default(T) : RandomAt(self);
+		}
+
 		public static bool IsClickable(this Button button, bool withAssert = false)
 		{
 			var canvas = button.GetComponentInParent<Canvas>();
