@@ -43,7 +43,7 @@ namespace WakuTest.Sample
 		{
 			yield return SetupEventSystem();
 			yield return Button("OpenWindowButton").Click();
-			yield return Find("CloseWindowButton");
+			yield return WaitForAppear("CloseWindowButton");
 			yield return Button("CloseWindowButton").Click();
 		}
 
@@ -53,9 +53,9 @@ namespace WakuTest.Sample
 			yield return SetupEventSystem();
 			for (int i = 0; i < 50; ++i)
 			{
+				yield return WaitForAppearClickableButton();
 				var buttons = GetAllClickableButton().Where(x => x.name != "RaiseExceptionButton");
-				if (buttons.Count() > 0) yield return buttons.ElementAt(Random.Range(0, buttons.Count())).Click();
-				yield return null;
+				yield return buttons.RandomAt().Click();
 			}
 		}
 	}
