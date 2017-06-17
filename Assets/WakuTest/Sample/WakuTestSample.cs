@@ -31,7 +31,7 @@ namespace WakuTest.Sample
 			yield return SetupEventSystem();
 			for (int i = 1; i < 10; ++i)
 			{
-                yield return Button("BButton").Click();
+				yield return Button("BButton").Click();
 				Assert.AreEqual(Text("AText").text, "0");
 				Assert.AreEqual(Text("CText").text, "0");
 			}
