@@ -76,7 +76,12 @@ namespace WakuTest
 
 		private GameObject GameObject(string name)
 		{
-			var go = UnityEngine.GameObject.Find(name);
+			var elements = name.Split('/');
+			var go = UnityEngine.GameObject.Find(elements[0]);
+			for (int i = 1; i < elements.Count(); ++i)
+			{
+				go = go.transform.Find(elements[i]).gameObject;
+			}
 			Assert.NotNull(go, "GameObject({0}) not found", name);
 			return go;
 		}
@@ -116,11 +121,18 @@ namespace WakuTest
 			var results = new List<RaycastResult>();
 			EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
 
-			var raycastResult = (results[0].gameObject.GetComponentInParent<Button>() == button);
+			var raycastResult = results.Count() > 0 ? (results[0].gameObject.GetComponentInParent<Button>() == button) : false;
 
 			if (withAssert)
 			{
-				Assert.IsTrue(raycastResult, "Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name);
+				if (results.Count() > 0)
+				{
+					Assert.IsTrue(raycastResult, "Button({0}) can not touch(over {1})", button.name, results[0].gameObject.name);
+				}
+				else
+				{
+					Assert.IsTrue(raycastResult, "Button({0}) can not touch", button.name);
+				}
 				Assert.IsTrue(button.gameObject.activeInHierarchy, "Button({0}) is inactive", button.name);
 				Assert.IsTrue(button.interactable, "Button({0}) is not interactable", button.name);
 			}
